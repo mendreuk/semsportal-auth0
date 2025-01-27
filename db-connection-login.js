@@ -24,6 +24,10 @@ function login(email, password, callback) {
         auth: {
           provider: 'semsportal',
             password: Buffer.from(password).toString('base64')
+        },
+        plan: {
+          created_at: Date.now(),
+          check_period_sec: 300
         }
       }
     });

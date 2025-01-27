@@ -26,11 +26,11 @@ function getUserClaim(event, providerAccessToken) {
     u.auth = {};
     u.auth.access_token = providerAccessToken;
   }
-  if (event.user.app_metadata.subscription?.plan) {
-    u.subscription = {};
-    u.subscription.created_at = event.user.app_metadata.subscription.created_at;
-    u.subscription.expires_at = event.user.app_metadata.subscription.expires_at;
-    u.subscription.plan = event.user.app_metadata.subscription.plan;
+  if (event.user.app_metadata.plan) {
+    u.plan = {};
+    u.plan.check_period_sec = event.user.app_metadata.plan.check_period_sec;
+    u.plan.created_at = event.user.app_metadata.plan.created_at;
+    u.plan.expires_at = event.user.app_metadata.plan.expires_at;
   }
   return u;
 }
