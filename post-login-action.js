@@ -11,15 +11,15 @@ const NAMESPACE = "https://ifttt.com/semsportal/";
  */
 exports.onExecutePostLogin = async (event, api) => {
   const providerAccessToken = await refreshProviderAccessToken(event, api);
-  const userClaim = getUserClaim(event, providerAccessToken);
+  const userClaim = createUserClaim(event, providerAccessToken);
   api.accessToken.setCustomClaim(NAMESPACE + 'user', userClaim);
 };
 
 /**
- * @param {Event} event - Details about the user and the context in which they are logging in.
+* @param {Event} event - Details about the user and the context in which they are logging in.
 * @param {string | null} providerAccessToken
 */
-function getUserClaim(event, providerAccessToken) {
+function createUserClaim(event, providerAccessToken) {
   const u = {};
   u.email = event.user.email;
   if (providerAccessToken) {
