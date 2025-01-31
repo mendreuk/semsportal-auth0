@@ -2,7 +2,8 @@
 
 const axios = require('axios');
 
-const NAMESPACE = "https://ifttt.com/semsportal/";
+const SEMSPORTAL_IFTTT_BASEURL = 'https://ifttt.com/semsportal';
+const NAMESPACE = SEMSPORTAL_IFTTT_BASEURL;
 /**
  * Handler that will be called during the execution of a PostLogin flow.
  *
@@ -10,38 +11,23 @@ const NAMESPACE = "https://ifttt.com/semsportal/";
  * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
  */
 exports.onExecutePostLogin = async (event, api) => {
+  console.log(`onExecutePostLogin: email: ${event.user.email}`);
   const providerAccessToken = await refreshProviderAccessToken(event, api);
   const userClaim = createUserClaim(event, providerAccessToken);
-  api.accessToken.setCustomClaim(NAMESPACE + 'user', userClaim);
+  api.accessToken.setCustomClaim(NAMESPACE + '/user', userClaim);
 };
-
-/**
-* @param {Event} event - Details about the user and the context in which they are logging in.
-* @param {string | null} providerAccessToken
-*/
-function createUserClaim(event, providerAccessToken) {
-  const u = {};
-  u.email = event.user.email;
-  if (providerAccessToken) {
-    u.auth = {};
-    u.auth.access_token = providerAccessToken;
-  }
-  if (event.user.app_metadata.plan) {
-    u.plan = {};
-    u.plan.check_period_sec = event.user.app_metadata.plan.check_period_sec;
-    u.plan.created_at = event.user.app_metadata.plan.created_at;
-    u.plan.expires_at = event.user.app_metadata.plan.expires_at;
-  }
-  return u;
-}
 
 /**
 * @param {Event} event - Details about the user and the context in which they are logging in.
 * @param {PostLoginAPI} api
 */
 async function refreshProviderAccessToken(event, api) {
-  console.log('Refresh started');
+  console.log('refresh started');
   const auth = event.user.app_metadata.auth;
+  if (!auth.password) {
+    throw new Error('missing password');
+  }
+
   const tokenOptions = {
     method: 'POST',
     url: `https://eu.semsportal.com/api/v2/Common/CrossLogin`,
@@ -69,13 +55,43 @@ async function refreshProviderAccessToken(event, api) {
   } else if (res && res.data) {
     status = res.data.code + " " + res.data.msg;
   }
-  console.log('Returned', status);
+  console.log('returned', status);
   auth.access_token = providerAccessToken;
   auth.last_status = status;
   auth.last_status_created_at = Date.now();
   api.user.setAppMetadata('auth', auth);
-  console.log('Finished');
-  return providerAccessToken;
+  if (status === 'OK') {
+    console.log('finished');
+    return providerAccessToken;
+  } else {
+    console.log('login failed');
+    api.redirect.sendUserTo(`https://${event.tenant.id}.us.auth0.com/v2/logout`, {
+      query: { 
+        client_id: event.client.client_id,
+        returnTo: `${SEMSPORTAL_IFTTT_BASEURL}/activation/start`
+        }
+    });
+  }
+}
+
+/**
+* @param {Event} event - Details about the user and the context in which they are logging in.
+* @param {string | null | undefined} providerAccessToken
+*/
+function createUserClaim(event, providerAccessToken) {
+  const u = {};
+  u.email = event.user.email;
+  if (providerAccessToken) {
+    u.auth = {};
+    u.auth.access_token = providerAccessToken;
+  }
+  if (event.user.app_metadata.plan) {
+    u.plan = {};
+    u.plan.check_period_sec = event.user.app_metadata.plan.check_period_sec;
+    u.plan.created_at = event.user.app_metadata.plan.created_at;
+    u.plan.expires_at = event.user.app_metadata.plan.expires_at;
+  }
+  return u;
 }
 
 /**
