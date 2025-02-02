@@ -10,34 +10,29 @@ function login(email, password, callback) {
       account: email,
       pwd: password
     }
-    //for more options check:
-    //https://github.com/mikeal/request#requestoptions-callback
   }, function(err, response, body) {
     if (err) {
 	console.log(err.message);
-      return callback(new WrongUsernameOrPasswordError(email, err.message));
+      return callback(err);
     }
     if (response.statusCode !== 200) {
 	console.log(`response status: ${response.statusCode}`);
-      return callback(new WrongUsernameOrPasswordError(email, `SemsPortal error status: ${response.statusCode}`));
+      return callback(new Error(`SemsPortal error status: ${response.statusCode}`));
     }
     if (body.code !== 0) {
-	console.log(`response code: ${body.code}: body.msg`);
-      return callback(new WrongUsernameOrPasswordError(email, `SemsPortal error code ${body.code}: ${body.msg}`));
+	console.log(`response code: ${body.code}: ${body.msg}`);
+      return callback(new WrongUsernameOrPasswordError(email, `SemsPortal error code: ${body.code} ${body.msg}`));
     }
     
     console.log('login successful');
     callback(null, {
       user_id: body.data.uid,
       email: email,
+      // this overwrites entire app_metadata on reconnecting the ifttt service
+      // permanent data like 'plan' should be stored in user_metadata
       app_metadata: {
         auth: {
-          provider: 'semsportal',
           password: Buffer.from(password).toString('base64')
-        },
-        plan: {
-          created_at: Date.now(),
-          check_period_sec: 300
         }
       }
 	});
