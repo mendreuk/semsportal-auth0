@@ -26,8 +26,8 @@ async function refreshProviderAccessToken(event, api) {
   console.log('refresh started');
   let status = '';
   let providerAccessToken;
-  const auth = event.user.app_metadata.auth;
-  if (auth.password) {
+  const auth = event.user.app_metadata?.auth;
+  if (auth?.password) {
     const tokenOptions = {
       method: 'POST',
       url: `https://eu.semsportal.com/api/v2/Common/CrossLogin`,
