@@ -17,7 +17,6 @@ To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsp
             * Application Type: Regular Web Application
         * Application URIs
             * Allowed Callback URLs: `https://ifttt.com/channels/semsportal_dev/authorize`
-            * Allower Logout URLs: `https://ifttt.com/semsportal_dev/activation/start`
         * Refresh Token Expiration
             * Set Maximum Refresh Token Lifetime
             * Maximum Refresh Token Lifetime: default (`31557600`)
@@ -41,8 +40,8 @@ To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsp
 1. open https://auth0.com/docs/api/management/v2 -> Set API Token -> this leads to https://auth0.com/docs/secure/tokens/access-tokens/management-api-access-tokens -> Get Management API tokens -> manually -> create a new API Explorer Application together with Auth0 Management API
 1. Applications -> **APIs** -> Auth0 Management API
     * Machine to Machine Applications
-	* authorize semsportal-ifttt-api-dev with only read:users (is used to initially read users and start their triggers)
-	* authorize API Explorer Application with all permissions (is used for maintenance from https://auth0.com/docs/api/management/v2)
+        * authorize semsportal-ifttt-api-dev with only read:users (is used to initially read users and start their triggers)
+        * authorize API Explorer Application with all permissions (is used for maintenance from https://auth0.com/docs/api/management/v2)
 1. Authentication -> **Database** -> Username-Password-Authentication -> Settings
     * Disable Sign Ups
 1. Custom **Database**
@@ -65,6 +64,7 @@ To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsp
         * Support Email: alois.huho+auth0@gmail.com
     * Advanced
         * Tenant Login URI: `https://ifttt.com/semsportal_dev/activation/start`
+        * Allowed Logout URLs: `https://ifttt.com/channels/semsportal_dev/authorize`
 
 ## References
 - [How to build an IFTTT integration - Getting started](https://www.youtube.com/watch?v=xkP_W9n21Nc)
