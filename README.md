@@ -1,7 +1,11 @@
 # semsportal-auth0
 
-## Installing DEV tenant from scratch
-account alois.huho@gmail.com
+## Installing new tenant from scratch
+DEV account alois.huho@gmail.com
+
+PROD account tra@g
+
+To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsportal-ifttt-api-dev with semsportal-ifttt-api and semsportal_dev with semsportal.
 
 1. Applications -> **Applications** -> new Regular Web Application
     * Settings
