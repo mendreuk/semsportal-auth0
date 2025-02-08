@@ -2,8 +2,7 @@
 
 const axios = require('axios');
 
-const SEMSPORTAL_IFTTT_BASEURL = 'https://ifttt.com/semsportal';
-const NAMESPACE = SEMSPORTAL_IFTTT_BASEURL;
+const NAMESPACE = 'https://ifttt.com/semsportal';
 /**
  * Handler that will be called during the execution of a PostLogin flow.
  *
@@ -73,10 +72,9 @@ async function refreshProviderAccessToken(event, api) {
 * @param {PostLoginAPI} api
 */
 function logout(event, api) {
-  api.redirect.sendUserTo(`https://${event.tenant.id}.us.auth0.com/v2/logout`, {
+  api.redirect.sendUserTo(`https://${event.tenant.id}.eu.auth0.com/v2/logout`, {
     query: {
-      client_id: event.client.client_id,
-      returnTo: `${SEMSPORTAL_IFTTT_BASEURL}/activation/start`
+      returnTo: event.transaction.redirect_uri
     }
   });
 }

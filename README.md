@@ -1,9 +1,9 @@
 # semsportal-auth0
 
 ## Installing new tenant from scratch
-DEV account alois.huho@gmail.com
+DEV EU account alois.huho@gmail.com
 
-PROD account tra@g
+PROD EU account tra@g
 
 To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsportal-ifttt-api-dev with semsportal-ifttt-api and semsportal_dev with semsportal.
 
@@ -37,7 +37,7 @@ To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsp
     * Identifier: `semsportal-ifttt` (no dev here)
     * Access Settings: Allow Offline Access
     * this API is used from IFTTT when calling Authorization URL (https://dev-chx50lp746zf2xfl.eu.auth0.com/authorize?audience=semsportal-ifttt&scope=offline_access+openid+email+profile)
-1. open https://auth0.com/docs/api/management/v2 -> Set API Token -> this leads to https://auth0.com/docs/secure/tokens/access-tokens/management-api-access-tokens -> Get Management API tokens -> manually -> create a new API Explorer Application together with Auth0 Management API
+1. open https://manage.auth0.com/dashboard/eu/dev-15hr8wvahf2zm7j0/apis/management/explorer to create a new API Explorer Application together with Auth0 Management API
 1. Applications -> **APIs** -> Auth0 Management API
     * Machine to Machine Applications
         * authorize semsportal-ifttt-api-dev with only read:users (is used to initially read users and start their triggers)
@@ -54,19 +54,21 @@ To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsp
 1. deleting "Forgot password?" from login page: https://community.auth0.com/t/how-to-remove-the-forgot-password-link-from-the-new-universal-login-page/92554
 1. **Actions** -> Triggers -> post-login
     * build action from scratch in Node22 with Name **Refresh provider access token**: source `post-login-action.js`
-    * modify api.redirect.sendUserTo (line 76) to proper domain *.eu.auth0.com
-    * modify const SEMSPORTAL_IFTTT_BASEURL = 'https://ifttt.com/semsportal_dev' (line 5) to proper dev url
-    * add dependency: `axios` (1.7.9)
-    * drag&drop between Start and Complete -> Apply
+    * add dependency: `axios` (1.7.9) -> Deploy
+    * back to triggers and drag&drop between Start and Complete -> Apply
 1. **Tenant** Settings
     * General -> Settings
         * Friendly Name: GoodWe SemsPortal Auth0
         * Support Email: alois.huho+auth0@gmail.com
+        * Support URL: https://docs.google.com/forms/d/e/1FAIpQLScYb5szsvl2ouJdjeXJ95rAqitq3sL5AXeJ9LZMU39NqWIshA/viewform
     * Advanced
         * Tenant Login URI: `https://ifttt.com/semsportal_dev/activation/start`
         * Allowed Logout URLs: `https://ifttt.com/channels/semsportal_dev/authorize`
+    * General
+        * Tenant Information: Run Readiness Check
 
 ## References
+- [Auth0 Management API](https://auth0.com/docs/api/management/v2)
 - [How to build an IFTTT integration - Getting started](https://www.youtube.com/watch?v=xkP_W9n21Nc)
 - [How to build an IFTTT integration - Authentication Part ](https://www.youtube.com/watch?v=qnj1XKTZfjQ)
 - [How to build an IFTTT integration - Authentication Part 2](https://www.youtube.com/watch?v=QwvPzcsYgh4)
