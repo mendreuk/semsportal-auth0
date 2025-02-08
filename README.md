@@ -47,18 +47,26 @@ To install PROD tenant replace semsportal-ifttt-dev with semsportal-ifttt, semsp
 1. Custom **Database**
     * Use my own database
     * Database Action Scripts
-        * no scripts other than **Login**: source `db-connection-login.js`
+        * **Login** script: source from file `db-connection-login.js`
+        * **Delete** script: replace line 13
+```
+- return callback(new Error(msg));
++ return callback(null);
+```
 1. **Branding** -> Universal Login
     * Company Logo: https://play-lh.googleusercontent.com/Q9ASU8NrsRJlDiu_vFfdmpqpoungCQOQ9Ws66Ja2bqCNjVsv3obYLYRIYdNZZNAWIE0
     * Primary Color: `#1d5d8a` for dev (or '#35a6f8' for prod)
-1. deleting "Forgot password?" from login page: https://community.auth0.com/t/how-to-remove-the-forgot-password-link-from-the-new-universal-login-page/92554
+1. delete "Forgot password?" from login page:
+    * set `disable_self_service_change_password: true` on the database **connection** using PATCH method
+    * all other properties must be present in the request except for id, name, startegy, so use GET first
+    * see https://community.auth0.com/t/how-to-remove-the-forgot-password-link-from-the-new-universal-login-page/92554
 1. **Actions** -> Triggers -> post-login
-    * build action from scratch in Node22 with Name **Refresh provider access token**: source `post-login-action.js`
+    * build action from scratch in Node22 with Name **Refresh provider access token**: source from file `post-login-action.js`
     * add dependency: `axios` (1.7.9) -> Deploy
     * back to triggers and drag&drop between Start and Complete -> Apply
 1. **Tenant** Settings
     * General -> Settings
-        * Friendly Name: GoodWe SemsPortal Auth0
+        * Friendly Name: GoodWe SemsPortal Automation
         * Support Email: alois.huho+auth0@gmail.com
         * Support URL: https://docs.google.com/forms/d/e/1FAIpQLScYb5szsvl2ouJdjeXJ95rAqitq3sL5AXeJ9LZMU39NqWIshA/viewform
     * Advanced
