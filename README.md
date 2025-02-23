@@ -59,7 +59,7 @@ To install PROD tenant replace `semsportal-ifttt-dev` with `semsportal-ifttt`, `
     * Custom Text:
         * pageTitle: `Log in to ${companyName}.`
         * title: `Log in to ${companyName}.`
-        * description: `By logging in you confirm and agree that you authorize IFTTT to read your selected daily metrics of your GoodWe inverter and use them in triggers you set up. Access is strictly read-only and there is no way for IFTTT to make any changes to your inverter configuration.`
+        * description: `Log in with your credentials for https://semsportal.com.                                                                                By logging in you confirm and agree that you authorize IFTTT to read your selected daily metrics of your GoodWe inverter and use them in triggers you set up. Access is strictly read-only and there is no way for IFTTT to make any changes to your inverter configuration.`
 1. delete "Forgot password?" from login page:
     * set `disable_self_service_change_password: true` on the database **connection** using PATCH method
     * all other properties must be present in the request except for id, name, startegy, so use GET first
